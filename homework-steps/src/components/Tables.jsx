@@ -35,7 +35,7 @@ const Tables = (props) => {
 }
 
 Tables.propTypes = {
-    name: React.PropTypes.object,
-    delete: React.PropTypes.func
+    name: PropTypes.array,
+    delete: PropTypes.func
 }
 export default Tables;
