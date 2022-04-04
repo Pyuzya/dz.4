@@ -20,38 +20,38 @@ const Form = (props) => {
         }
     ])
 
-
     const handleDelete = (id => {
         setState(state.filter((e, i) => i !== id))
     })
 
-    const handleChangeDate = (evt => {
-        setChangeDate({ value: evt.target.value })
+    const handleChangeDate = ((evt, i) => {
+        let newState = [...state]
+        newState[i].date = evt
+        setState(newState)
     })
 
-    const handleChangeLength = (evt => {
-        setChangeLength({ value: evt.target.value })
+    const handleChangeLength = ((evt, i) => {
+        let newState = [...state]
+        newState[i].length = evt
+        setState(newState)
     })
 
-
-
-
-    const handleSubmit = ((evt, i) => {
+    const handleSubmit = ((evt) => {
         evt.preventDefault()
 
-        const findDate = state.findIndex(elem => elem.date === changeDate.value)
+        const findDate = state.findIndex(elem => elem.date === changeDate)
 
         if (findDate >= 0) {
             let newState = [...state]
-            const newDate = Number(changeLength.value)
-            newState[findDate].length = Number(newState[findDate].length) + newDate
+            const newLength = Number(changeLength)
+            newState[findDate].length = Number(newState[findDate].length) + newLength
             setState(newState)
         } else {
             setState((prevState) => {
                 return [
                     ...prevState, {
-                        date: changeDate.value,
-                        length: changeLength.value
+                        date: changeDate,
+                        length: changeLength
                     }
                 ]
             }
@@ -62,11 +62,11 @@ const Form = (props) => {
     return (
         <div className="form">
             <form onSubmit={evt => { handleSubmit(evt) }}>
-                <input name="date" type='text' className="input" placeholder="Дата(ГГГГ.ММ.ДД)" onChange={handleChangeDate}></input>
-                <input name="length" type='number' className="input" placeholder="Пройдено км" onChange={handleChangeLength}></input>
+                <input name="date" type='date' className="input" placeholder="Дата(ДД.ММ.ГГГГ)" onChange={(evt) => setChangeDate(evt.target.value)}></input>
+                <input name="length" type='number' className="input" placeholder="Пройдено км" onChange={(evt) => setChangeLength(evt.target.value)}></input>
                 <button className="button" >Добавить</button>
             </form>
-            <Tables name={state} delete={handleDelete} />
+            <Tables name={state} delete={handleDelete} changeDate={handleChangeDate} changeLength={handleChangeLength} />
         </div>
     )
 }
